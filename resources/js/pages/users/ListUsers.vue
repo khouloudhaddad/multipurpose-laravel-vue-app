@@ -11,7 +11,7 @@
     const editing = ref(false);
     const formValues = ref();
     const form = ref(null);
- 
+
     const createUserSchema = yup.object({
         name: yup.string().required(),
         email: yup.string().email().required(),
@@ -21,9 +21,9 @@
     const editUserSchema = yup.object({
         name: yup.string().required(),
         email: yup.string().email().required(),
-        password: yup.string().when((password, schema)=>{
-            return password ? schema.required().min(8) : schema
-        })
+        password: yup.string().when(([password], schema) => {
+            return password ? schema.min(8) : schema;
+        }),
     });
 
     const getUsers = () => {
@@ -60,9 +60,8 @@
     }
 
     const updateUser = (values) =>{
-        axios.put('/api/users'+ formValues.value.id, values)
+        axios.put('/api/users/'+ formValues.value.id, values)
         .then((resp)=>{
-           
             const index = users.value.findIndex(user => user.id === resp.data.id)
             users.value[index] = resp.data;
             jQuery('#userFormModal').modal('hide');
@@ -158,14 +157,17 @@
                 <div class="modal-header bg-primary">
                     <h5 class="modal-title fs-5" id="userFormModalLabel">
                         <i class="fas fa-user-plus font-weight-bold">&nbsp;</i>
-                        <span v-if="editing">Edit user</span>   
+                        <span v-if="editing">Edit user</span>
                         <span v-else>Create new user</span>
                     </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <Form ref="form" @submit="handleSubmit" :validation-schema="editing? editUserSchema : createUserSchema" v-slot="{ errors }" :initial-values="formValues">
+                <Form ref="form" @submit="handleSubmit"
+                :validation-schema="editing ? editUserSchema : createUserSchema"
+                v-slot="{ errors }"
+                :initial-values="formValues">
                     <div class="modal-body">
 
                         <div class="form-group mb-2">

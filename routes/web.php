@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApplicationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,6 +19,9 @@ Route::get('/', function () {
 });
 
 
-Route::get('/admin/dashboard', function () {
-    return view('dashboard');
-});
+// Route::get('/admin/dashboard', function () {
+//     return view('dashboard');
+// });
+
+//regular expression meaning one or more characters
+Route::get('{view}', ApplicationController::class)->where('view','(.*)');

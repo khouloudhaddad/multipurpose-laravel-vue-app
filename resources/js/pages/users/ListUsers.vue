@@ -7,7 +7,7 @@
     import * as yup from 'yup';
     import jQuery from 'jquery';
     import { useToastr } from '../../toastr';
-    
+
 
     const toastr = useToastr();
 
@@ -115,10 +115,10 @@
     }
 
     const deleteUser = () =>{
-        axios.delete(`/api/users/${userToBeDeletedId}`)  
+        axios.delete(`/api/users/${userToBeDeletedId.value}`)
         .then(()=>{
             jQuery('#userDeleteFormModal').modal('hide');
-            users.value = user.filter(user => user.id !== userToBeDeletedId.value);
+            users.value = users.value.filter(user => user.id !== userToBeDeletedId.value);
             toastr.success('User delete successfully !');
         })
     }
@@ -171,7 +171,7 @@
                                 <td>-</td>
                                 <td class="text-center">
                                     <a href="#" @click.prevent="editUser(user)">
-                                        <i class="fa fa-edit me-2"></i>
+                                        <i class="fa fa-edit mr-2"></i>
                                     </a>
                                     <a href="#" @click.prevent="confirmUserDelete(user)">
                                         <i class="fa fa-trash text-danger"></i>
@@ -247,7 +247,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                
+
                     <div class="modal-body">
                         <h5>Are you sure you want to delete this user?</h5>
                     </div>
@@ -256,7 +256,7 @@
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                         <button type="button" class="btn btn-primary" @click.prevent="deleteUser">Confirm</button>
                     </div>
-                
+
             </div>
         </div>
     </div>

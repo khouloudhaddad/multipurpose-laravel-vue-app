@@ -5,13 +5,25 @@
     } from 'vue';
     import { Form, Field, useResetForm } from 'vee-validate';
     import * as yup from 'yup';
-    const users = ref([]);
     import jQuery from 'jquery';
 
+    const users = ref([]);
+    const editing = ref(false);
+    const formValues = ref();
+    const form = ref(null);
+ 
     const createUserSchema = yup.object({
         name: yup.string().required(),
         email: yup.string().email().required(),
         password: yup.string().required().min(8)
+    });
+
+    const editUserSchema = yup.object({
+        name: yup.string().required(),
+        email: yup.string().email().required(),
+        password: yup.string().when((password, schema)=>{
+            return password ? schema.required().min(8) : schema
+        })
     });
 
     const getUsers = () => {
@@ -31,9 +43,29 @@
        })
     }
 
+    const editUser = (user) =>{
+        editing.value = true;
+        form.value.resetForm();
+        jQuery('#addUserModal').modal('show');
+        formValues.value = {
+            id: user.id,
+            name: user.name,
+            email: user.email
+        }
+    }
+
+    const addUser = () =>{
+        editing.value = false;
+        jQuery('#addUserModal').modal('show');
+    }
+
+    const updateUser = (values) =>{
+
+    }
+
     onMounted(() => {
-        getUsers()
-    })
+        getUsers();
+    });
 </script>
 <template>
     <div class="content-header">
@@ -56,7 +88,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12 mb-3 text-end">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addUserModal">
+                    <button type="button" class="btn btn-primary" @click="addUser">
                         <i class="fas fa-user-plus">&nbsp;</i>
                         Add user
                     </button>
@@ -80,7 +112,11 @@
                                 <td>{{ user.email }}</td>
                                 <td>--</td>
                                 <td>-</td>
-                                <td>-</td>
+                                <td class="text-center">
+                                    <a href="#" @click.prevent="editUser(user)">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -97,13 +133,14 @@
                 <div class="modal-header bg-primary">
                     <h5 class="modal-title fs-5" id="addUserModalLabel">
                         <i class="fas fa-user-plus font-weight-bold">&nbsp;</i>
-                        Create new user
+                        <span v-if="editing">Edit user</span>   
+                        <span v-else>Create new user</span>
                     </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <Form  @submit="createUser" :validation-schema="createUserSchema" v-slot="{ errors }">
+                <Form ref="form" @submit="editing ? updateUser : createUser" :validation-schema="editing? editUserSchema : createUserSchema" v-slot="{ errors }" :initial-values="formValues">
                     <div class="modal-body">
 
                         <div class="form-group mb-2">

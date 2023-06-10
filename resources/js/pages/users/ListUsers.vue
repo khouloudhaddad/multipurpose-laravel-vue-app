@@ -6,6 +6,10 @@
     import { Form, Field, useResetForm  } from 'vee-validate';
     import * as yup from 'yup';
     import jQuery from 'jquery';
+    import { useToastr } from '../../toastr';
+    
+
+    const toastr = useToastr();
 
     const users = ref([]);
     const editing = ref(false);
@@ -37,6 +41,7 @@
        axios.post('/api/users', values)
        .then((response)=>{
             users.value.unshift(response.data);
+            toastr.success('User created successfully')
             //hide modal
             jQuery('#userFormModal').modal('hide');
             //clear form
@@ -73,6 +78,7 @@
                 const index = users.value.findIndex(user => user.id === resp.data.id)
                 users.value[index] = resp.data;
                 jQuery('#userFormModal').modal('hide');
+                toastr.success('User updated successfully!');
 
             })
             .catch((error) => {

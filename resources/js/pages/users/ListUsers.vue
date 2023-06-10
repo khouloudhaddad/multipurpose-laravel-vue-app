@@ -37,7 +37,7 @@
        axios.post('/api/users', values).then((response)=>{
         users.value.unshift(response.data);
         //hide modal
-        jQuery('#addUserModal').modal('hide');
+        jQuery('#userFormModal').modal('hide');
         //clear form
         resetForm();
        })
@@ -46,7 +46,7 @@
     const editUser = (user) =>{
         editing.value = true;
         form.value.resetForm();
-        jQuery('#addUserModal').modal('show');
+        jQuery('#userFormModal').modal('show');
         formValues.value = {
             id: user.id,
             name: user.name,
@@ -56,11 +56,36 @@
 
     const addUser = () =>{
         editing.value = false;
-        jQuery('#addUserModal').modal('show');
+        jQuery('#userFormModal').modal('show');
     }
 
     const updateUser = (values) =>{
+        axios.put('/api/users'+ formValues.value.id, values)
+        .then((resp)=>{
+           
+            const index = users.value.findIndex(user => user.id === resp.data.id)
+            users.value[index] = resp.data;
+            jQuery('#userFormModal').modal('hide');
 
+        })
+        .catch((error)=>{
+
+            console.log(error);
+
+        })
+        .finally(()=>{
+
+            form.value.resetForm();
+
+        })
+    }
+
+    const handleSubmit = (values) =>{
+        if(editing.value){
+            updateUser(values)
+        }else{
+            createUser(values)
+        }
     }
 
     onMounted(() => {
@@ -126,12 +151,12 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="addUserModal" data-backdrop="static" tabindex="-1" aria-labelledby="addUserModalLabel"
+    <div class="modal fade" id="userFormModal" data-backdrop="static" tabindex="-1" aria-labelledby="userFormModalLabel"
         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-primary">
-                    <h5 class="modal-title fs-5" id="addUserModalLabel">
+                    <h5 class="modal-title fs-5" id="userFormModalLabel">
                         <i class="fas fa-user-plus font-weight-bold">&nbsp;</i>
                         <span v-if="editing">Edit user</span>   
                         <span v-else>Create new user</span>
@@ -140,7 +165,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <Form ref="form" @submit="editing ? updateUser : createUser" :validation-schema="editing? editUserSchema : createUserSchema" v-slot="{ errors }" :initial-values="formValues">
+                <Form ref="form" @submit="handleSubmit" :validation-schema="editing? editUserSchema : createUserSchema" v-slot="{ errors }" :initial-values="formValues">
                     <div class="modal-body">
 
                         <div class="form-group mb-2">

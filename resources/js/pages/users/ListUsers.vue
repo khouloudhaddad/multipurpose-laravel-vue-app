@@ -3,7 +3,7 @@
         onMounted,
         ref
     } from 'vue';
-    import { Form, Field, useResetForm } from 'vee-validate';
+    import { Form, Field, useResetForm  } from 'vee-validate';
     import * as yup from 'yup';
     import jQuery from 'jquery';
 
@@ -32,14 +32,22 @@
         })
     }
 
-    const createUser = (values, { resetForm  }) => {
+    const createUser = (values, { resetForm, setErrors }) => {
        console.log(values)
-       axios.post('/api/users', values).then((response)=>{
-        users.value.unshift(response.data);
-        //hide modal
-        jQuery('#userFormModal').modal('hide');
-        //clear form
-        resetForm();
+       axios.post('/api/users', values)
+       .then((response)=>{
+            users.value.unshift(response.data);
+            //hide modal
+            jQuery('#userFormModal').modal('hide');
+            //clear form
+            resetForm();
+       })
+        .catch((error) => {
+            if(error.response.data.errors){
+
+                setErrors(error.response.data.errors);
+
+            }
        })
     }
 
@@ -59,31 +67,34 @@
         jQuery('#userFormModal').modal('show');
     }
 
-    const updateUser = (values) =>{
-        axios.put('/api/users/'+ formValues.value.id, values)
-        .then((resp)=>{
-            const index = users.value.findIndex(user => user.id === resp.data.id)
-            users.value[index] = resp.data;
-            jQuery('#userFormModal').modal('hide');
+    const updateUser = (values, {setErrors}) =>{
+        axios.put('/api/users/' + formValues.value.id, values)
+            .then((resp) => {
+                const index = users.value.findIndex(user => user.id === resp.data.id)
+                users.value[index] = resp.data;
+                jQuery('#userFormModal').modal('hide');
 
-        })
-        .catch((error)=>{
+            })
+            .catch((error) => {
 
-            console.log(error);
+                if (error.response.data.errors) {
 
-        })
-        .finally(()=>{
+                    setErrors(error.response.data.errors);
 
-            form.value.resetForm();
+                }
 
-        })
+            });
+
     }
 
-    const handleSubmit = (values) =>{
+const handleSubmit = (values, actions) => {
+
+    console.log('actions', actions)
+
         if(editing.value){
-            updateUser(values)
+            updateUser(values, actions)
         }else{
-            createUser(values)
+            createUser(values, actions)
         }
     }
 

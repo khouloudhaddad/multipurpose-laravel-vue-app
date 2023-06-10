@@ -13,28 +13,32 @@ class UserController extends Controller
         return User::latest()->get();
     }
 
-    public function store(UserRequest $request){
+    public function store(){
 
-        $validated = $request->validated();
+        request()->validate([
+            'email' => 'required|email|unique:users,email',
+        ]);
 
-        if($validated){
-            return User::create([
+        return User::create([
                 'name' => request('name'),
                 'email' => request('email'),
                 'password' => bcrypt(request('password')),
-            ]);
-        }
+        ]);
 
     }
 
     public function update(User $user){
 
+        request()->validate([
+            'email' => 'required|email|unique:users,email,'.$user->id,
+        ]);
+        
         $user->update([
             'name' => request('name'),
             'email' => request('email'),
             'password' => request('password') ? bcrypt(request('password')): $user->password,
         ]);
-        
+
         return $user;
 
     }

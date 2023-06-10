@@ -4,13 +4,15 @@
         reactive,
         ref
     } from 'vue';
+    import { Form, Field, useResetForm } from 'vee-validate';
+    import * as yup from 'yup';
 
     const users = ref([]);
 
-    const form = reactive({
-        name: '',
-        email: '',
-        password: ''
+    const schema = yup.object({
+        name: yup.string().required(),
+        email: yup.string().email().required(),
+        password: yup.string().required().min(8)
     });
 
     const getUsers = () => {
@@ -19,8 +21,15 @@
         })
     }
 
-    const createUser = () => {
-        axios.post('/api/users', form)
+    const createUser = (values, {resetForm}) => {
+       console.log(values)
+       axios.post('/api/users', values).then((response)=>{
+        users.value.unshift(response.data);
+        //clear form
+        resetForm();
+        //hide modal
+        $('#addUserModal').model('hide');
+       })
     }
 
     onMounted(() => {
@@ -96,28 +105,30 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="" autocomplete="off">
+                <Form  @submit="createUser" :validation-schema="schema" v-slot="{ errors }">
                     <div class="modal-body">
 
                         <div class="form-group mb-2">
                             <label for="name">Name</label>
-                            <input type="text" name="name" id="name" class="form-control" v-model="form.name">
+                            <Field type="text" name="name" id="name" class="form-control" :class="{'is-invalid': errors.name}"  />
+                            <span class="invalid-feedback">{{ errors.name }}</span>
                         </div>
                         <div class="form-group mb-2">
                             <label for="email">Email</label>
-                            <input type="email" name="email" id="email" class="form-control" v-model="form.email">
+                            <Field type="email" name="email" id="email" class="form-control" :class="{'is-invalid': errors.email}" />
+                            <span class="invalid-feedback">{{ errors.email }}</span>
                         </div>
                         <div class="form-group mb-2">
                             <label for="password">Password</label>
-                            <input type="password" name="password" id="password" class="form-control"
-                                v-model="form.password">
+                            <Field type="password" name="password" id="password" class="form-control" :class="{'is-invalid': errors.password}" />
+                            <span class="invalid-feedback">{{ errors.password }}</span>
                         </div>
 
                     </div>
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" @click="createUser">Save</button>
+                        <button type="button" class="btn btn-primary">Save</button>
                     </div>
                 </form>
             </div>

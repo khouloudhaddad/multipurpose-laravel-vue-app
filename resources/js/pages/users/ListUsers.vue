@@ -15,6 +15,7 @@
     const editing = ref(false);
     const formValues = ref();
     const form = ref(null);
+    const userToBeDeletedId = ref(null);
 
     const createUserSchema = yup.object({
         name: yup.string().required(),
@@ -93,9 +94,9 @@
 
     }
 
-const handleSubmit = (values, actions) => {
+    const handleSubmit = (values, actions) => {
 
-    console.log('actions', actions)
+        console.log('actions', actions)
 
         if(editing.value){
             updateUser(values, actions)
@@ -107,6 +108,21 @@ const handleSubmit = (values, actions) => {
     onMounted(() => {
         getUsers();
     });
+
+    const confirmUserDelete = (user)=>{
+        jQuery('#userDeleteFormModal').modal('show');
+        userToBeDeletedId.value = user.id;
+    }
+
+    const deleteUser = () =>{
+        axios.delete(`/api/users/${userToBeDeletedId}`)  
+        .then(()=>{
+            jQuery('#userDeleteFormModal').modal('hide');
+            users.value = user.filter(user => user.id !== userToBeDeletedId.value);
+            toastr.success('User delete successfully !');
+        })
+    }
+
 </script>
 <template>
     <div class="content-header">
@@ -155,7 +171,10 @@ const handleSubmit = (values, actions) => {
                                 <td>-</td>
                                 <td class="text-center">
                                     <a href="#" @click.prevent="editUser(user)">
-                                        <i class="fa fa-edit"></i>
+                                        <i class="fa fa-edit me-2"></i>
+                                    </a>
+                                    <a href="#" @click.prevent="confirmUserDelete(user)">
+                                        <i class="fa fa-trash text-danger"></i>
                                     </a>
                                 </td>
                             </tr>
@@ -166,7 +185,7 @@ const handleSubmit = (values, actions) => {
         </div>
     </div>
 
-    <!-- Modal -->
+    <!-- Create/Edit User Modal -->
     <div class="modal fade" id="userFormModal" data-backdrop="static" tabindex="-1" aria-labelledby="userFormModalLabel"
         aria-hidden="true">
         <div class="modal-dialog">
@@ -206,10 +225,38 @@ const handleSubmit = (values, actions) => {
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                         <button type="submit" class="btn btn-primary">Save</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete User Modal -->
+    <div class="modal fade" id="userDeleteFormModal" data-backdrop="static" tabindex="-1" aria-labelledby="userDeleteFormModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary">
+                    <h5 class="modal-title fs-5" id="userDeleteFormModalLabel">
+                        <i class="fas fa-user-plus font-weight-bold">&nbsp;</i>
+                        <span>Delete user</span>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                
+                    <div class="modal-body">
+                        <h5>Are you sure you want to delete this user?</h5>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" @click.prevent="deleteUser">Confirm</button>
+                    </div>
+                
             </div>
         </div>
     </div>

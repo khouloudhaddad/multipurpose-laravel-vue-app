@@ -34,12 +34,16 @@
 
     const createUser = (values, { resetForm  }) => {
        console.log(values)
-       axios.post('/api/users', values).then((response)=>{
-        users.value.unshift(response.data);
-        //hide modal
-        jQuery('#userFormModal').modal('hide');
-        //clear form
-        resetForm();
+       axios.post('/api/users', values)
+       .then((response)=>{
+            users.value.unshift(response.data);
+            //hide modal
+            jQuery('#userFormModal').modal('hide');
+            //clear form
+            resetForm();
+       })
+       .catch((error)=>{
+            setFieldError('email', 'error')        
        })
     }
 
@@ -79,11 +83,12 @@
         })
     }
 
-    const handleSubmit = (values) =>{
+    const handleSubmit = (values, actions) =>{
+       
         if(editing.value){
-            updateUser(values)
+            updateUser(values, actions)
         }else{
-            createUser(values)
+            createUser(values, actions)
         }
     }
 

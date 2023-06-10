@@ -3,7 +3,7 @@
         onMounted,
         ref
     } from 'vue';
-    import { Form, Field, useResetForm } from 'vee-validate';
+    import { Form, Field, useResetForm  } from 'vee-validate';
     import * as yup from 'yup';
     import jQuery from 'jquery';
 
@@ -32,7 +32,7 @@
         })
     }
 
-    const createUser = (values, { resetForm  }) => {
+    const createUser = (values, { resetForm, setFieldError }) => {
        console.log(values)
        axios.post('/api/users', values)
        .then((response)=>{
@@ -42,8 +42,9 @@
             //clear form
             resetForm();
        })
-       .catch((error)=>{
-            setFieldError('email', 'error')        
+        .catch((error) => {
+            console.log(error)
+            setFieldError('email', 'error')
        })
     }
 
@@ -83,8 +84,10 @@
         })
     }
 
-    const handleSubmit = (values, actions) =>{
-       
+const handleSubmit = (values, actions) => {
+
+    console.log('actions', actions)
+
         if(editing.value){
             updateUser(values, actions)
         }else{

@@ -44,7 +44,7 @@
        })
         .catch((error) => {
             console.log(error)
-            setFieldError('email', 'error')
+            setFieldError('email', error.response.data.errors.email[0])
        })
     }
 

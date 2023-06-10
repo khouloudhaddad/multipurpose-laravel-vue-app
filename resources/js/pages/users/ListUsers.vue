@@ -45,7 +45,7 @@
         .catch((error) => {
             if(error.response.data.errors){
 
-                setErrors(error.response.data.errors.email[0]);
+                setErrors(error.response.data.errors);
 
             }         
        })
@@ -79,7 +79,7 @@
 
             if(error.response.data.errors){
 
-                setErrors(error.response.data.errors.email[0]);
+                setErrors(error.response.data.errors);
 
             }   
 

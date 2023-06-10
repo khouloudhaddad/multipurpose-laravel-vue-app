@@ -73,3 +73,6 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 
 - `php artisan make:controller Admin/UserController`
 
+In order to add users, run `php artisan tinker`, type enter && > `User::factory()->create();`
+- Run `npm i vee-validate --save`
+- Run `npm i -S yup`

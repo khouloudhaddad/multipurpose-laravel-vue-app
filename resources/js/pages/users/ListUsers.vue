@@ -47,7 +47,7 @@
 
                 setErrors(error.response.data.errors);
 
-            }         
+            }
        })
     }
 
@@ -68,27 +68,23 @@
     }
 
     const updateUser = (values, {setErrors}) =>{
-        axios.put('/api/users/'+ formValues.value.id, values)
-        .then((resp)=>{
-            const index = users.value.findIndex(user => user.id === resp.data.id)
-            users.value[index] = resp.data;
-            jQuery('#userFormModal').modal('hide');
+        axios.put('/api/users/' + formValues.value.id, values)
+            .then((resp) => {
+                const index = users.value.findIndex(user => user.id === resp.data.id)
+                users.value[index] = resp.data;
+                jQuery('#userFormModal').modal('hide');
 
-        })
-        .catch((error)=>{
+            })
+            .catch((error) => {
 
-            if(error.response.data.errors){
+                if (error.response.data.errors) {
 
-                setErrors(error.response.data.errors);
+                    setErrors(error.response.data.errors);
 
-            }   
+                }
 
-        })
-        .finally(()=>{
+            });
 
-            form.value.resetForm();
-
-        })
     }
 
 const handleSubmit = (values, actions) => {

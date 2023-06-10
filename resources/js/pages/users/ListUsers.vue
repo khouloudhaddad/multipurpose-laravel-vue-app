@@ -5,8 +5,8 @@
     } from 'vue';
     import { Form, Field, useResetForm } from 'vee-validate';
     import * as yup from 'yup';
-
     const users = ref([]);
+    import jQuery from 'jquery';
 
     const createUserSchema = yup.object({
         name: yup.string().required(),
@@ -25,7 +25,7 @@
        axios.post('/api/users', values).then((response)=>{
         users.value.unshift(response.data);
         //hide modal
-        $('#addUserModal').model('hide');
+        jQuery('#addUserModal').modal('hide');
         //clear form
         resetForm();
        })
@@ -125,7 +125,7 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary">Save</button>
                     </div>
                 </form>

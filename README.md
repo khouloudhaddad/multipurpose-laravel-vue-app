@@ -71,5 +71,5 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 - Run `npm install`
 - Install [Admin LTE](https://adminlte.io/docs/3.2/layout.html) template : `npm install admin-lte@^3.2 --save`
 
-- Run `npm i vue-router` && `php artisan make:controller ApplicationController`
+- `php artisan make:controller Admin/UserController`
 

@@ -1,3 +1,19 @@
+<script setup>
+import { onMounted, ref } from 'vue';
+
+
+const users = ref([]);
+
+const getUsers = () => {
+    axios.get('/api/users').then((response) => {
+        users.value = response.data;
+   })
+}
+
+onMounted(() => {
+    getUsers()
+})
+</script>
 <template>
     <div class="content-header">
         <div class="container-fluid">
@@ -18,7 +34,30 @@
 
     <div class="content">
         <div class="container-fluid">
-
+            <div class="card">
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <th style="width: 10px">#</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Registration Date</th>
+                            <th>Role</th>
+                            <th>Options</th>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(user, index) in users" :key="user.id">
+                                <td>{{ index+1 }}</td>
+                                <td>{{ user.name }}</td>
+                                <td>{{ user.email }}</td>
+                                <td>--</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </template>

@@ -16,7 +16,9 @@ class UserController extends Controller
     public function store(){
 
         request()->validate([
+            'name' => 'required|regex:/^[\pL\s\-]+$/u',
             'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:8',
         ]);
 
         return User::create([
@@ -30,9 +32,11 @@ class UserController extends Controller
     public function update(User $user){
 
         request()->validate([
+            'name' => 'required|regex:/^[\pL\s\-]+$/u',
             'email' => 'required|email|unique:users,email,'.$user->id,
+            'password' => 'sometimes|min:8',
         ]);
-        
+
         $user->update([
             'name' => request('name'),
             'email' => request('email'),

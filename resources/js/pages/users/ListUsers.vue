@@ -1,7 +1,6 @@
 <script setup>
     import {
         onMounted,
-        reactive,
         ref
     } from 'vue';
     import { Form, Field, useResetForm } from 'vee-validate';
@@ -9,7 +8,7 @@
 
     const users = ref([]);
 
-    const schema = yup.object({
+    const createUserSchema = yup.object({
         name: yup.string().required(),
         email: yup.string().email().required(),
         password: yup.string().required().min(8)
@@ -21,14 +20,14 @@
         })
     }
 
-    const createUser = (values, {resetForm}) => {
+    const createUser = (values, { resetForm  }) => {
        console.log(values)
        axios.post('/api/users', values).then((response)=>{
         users.value.unshift(response.data);
-        //clear form
-        resetForm();
         //hide modal
         $('#addUserModal').model('hide');
+        //clear form
+        resetForm();
        })
     }
 
@@ -52,7 +51,6 @@
             </div>
         </div>
     </div>
-
 
     <div class="content">
         <div class="container-fluid">
@@ -105,7 +103,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <Form  @submit="createUser" :validation-schema="schema" v-slot="{ errors }">
+                <Form  @submit="createUser" :validation-schema="createUserSchema" v-slot="{ errors }">
                     <div class="modal-body">
 
                         <div class="form-group mb-2">
@@ -128,7 +126,7 @@
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
                     </div>
                 </form>
             </div>

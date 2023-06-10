@@ -6,6 +6,9 @@
     import { Form, Field, useResetForm  } from 'vee-validate';
     import * as yup from 'yup';
     import jQuery from 'jquery';
+    import { useToastr } from '../../toastr.js';
+
+    const toastr = useToastr();
 
     const users = ref([]);
     const editing = ref(false);
@@ -100,6 +103,7 @@ const handleSubmit = (values, actions) => {
 
     onMounted(() => {
         getUsers();
+        toastr.info('success')
     });
 </script>
 <template>

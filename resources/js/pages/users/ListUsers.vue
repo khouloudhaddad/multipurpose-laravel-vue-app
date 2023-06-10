@@ -41,6 +41,7 @@
        axios.post('/api/users', values)
        .then((response)=>{
             users.value.unshift(response.data);
+            toastr.success('User created successfully')
             //hide modal
             jQuery('#userFormModal').modal('hide');
             //clear form
@@ -77,6 +78,7 @@
                 const index = users.value.findIndex(user => user.id === resp.data.id)
                 users.value[index] = resp.data;
                 jQuery('#userFormModal').modal('hide');
+                toastr.success('User updated successfully!');
 
             })
             .catch((error) => {
@@ -104,7 +106,6 @@ const handleSubmit = (values, actions) => {
 
     onMounted(() => {
         getUsers();
-        toastr.info('success')
     });
 </script>
 <template>

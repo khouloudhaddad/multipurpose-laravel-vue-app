@@ -64,3 +64,10 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+
+## Steps to rebuild project from scratch
+- Create new laravel project
+- Run `npm install`
+- Install [Admin LTE](https://adminlte.io/docs/3.2/layout.html) template : `npm install admin-lte@^3.2 --save`
+

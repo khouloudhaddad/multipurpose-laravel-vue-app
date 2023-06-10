@@ -6,7 +6,8 @@
     import { Form, Field, useResetForm  } from 'vee-validate';
     import * as yup from 'yup';
     import jQuery from 'jquery';
-    import { useToastr } from '../../toastr.js';
+    import { useToastr } from '../../toastr';
+    
 
     const toastr = useToastr();
 

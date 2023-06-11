@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->tinyInger('role')->default(RoleType::USER->value);
+            $table->tinyInteger('role')->default(RoleType::USER->value);
         });
     }
 

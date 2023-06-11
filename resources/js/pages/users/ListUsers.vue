@@ -7,7 +7,7 @@
     import * as yup from 'yup';
     import jQuery from 'jquery';
     import { useToastr } from '../../toastr';
-
+    import { formatDate } from '../../helper'
 
     const toastr = useToastr();
 
@@ -123,6 +123,15 @@
         })
     }
 
+    /**
+     * Format a date
+     * @param {dateString} dateString
+     */
+     const formatDateOld =(dateString)=> {
+            const date = new Date(dateString);
+            return new Intl.DateTimeFormat('default', {dateStyle: 'long'}).format(date);
+    }
+
 </script>
 <template>
     <div class="content-header">
@@ -167,7 +176,7 @@
                                 <td>{{ index+1 }}</td>
                                 <td>{{ user.name }}</td>
                                 <td>{{ user.email }}</td>
-                                <td>--</td>
+                                <td>{{ formatDate(user.created_at) }}</td>
                                 <td>-</td>
                                 <td class="text-center">
                                     <a href="#" @click.prevent="editUser(user)">

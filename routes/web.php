@@ -27,5 +27,6 @@ Route::get('/api/users', [UserController::class, 'index']);
 Route::post('/api/users', [UserController::class, 'store']);
 Route::put('/api/users/{user}', [UserController::class, 'update']);
 Route::delete('/api/users/{user}', [UserController::class, 'delete']);
+Route::patch('/api/users/{user}/change-role', [UserController::class, 'changeRole']);
 //regular expression meaning one or more characters
 Route::get('{view}', ApplicationController::class)->where('view','(.*)');

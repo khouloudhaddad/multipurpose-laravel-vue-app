@@ -76,3 +76,4 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 In order to add users, run `php artisan tinker`, type enter && > `User::factory()->create();`
 - Run `npm i vee-validate --save`
 - Run `npm i -S yup`
+- `php artisan make:migration add_role_field_to_users_table`

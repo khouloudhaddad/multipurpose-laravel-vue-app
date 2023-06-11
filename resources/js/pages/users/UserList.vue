@@ -16,7 +16,6 @@
     const editing = ref(false);
     const formValues = ref();
     const form = ref(null);
-    const userToBeDeletedId = ref(null);
 
     const createUserSchema = yup.object({
         name: yup.string().required(),
@@ -117,6 +116,10 @@
      const formatDateOld =(dateString)=> {
         const date = new Date(dateString);
         return new Intl.DateTimeFormat('default', {dateStyle: 'long'}).format(date);
+     }
+
+    const userDeleted = (userId) => {
+        users.value = users.value.filter(user => user.id !== userId)
     }
 
 </script>
@@ -163,6 +166,8 @@
                             v-for="(user, index) in users" :key="user.id"
                             :user=user
                             :index=index
+                            @user-deleted="userDeleted"
+                            @edit-user="editUser"
                             />
                         </tbody>
                     </table>
@@ -219,31 +224,5 @@
         </div>
     </div>
 
-    <!-- Delete User Modal -->
-    <div class="modal fade" id="userDeleteFormModal" data-backdrop="static" tabindex="-1" aria-labelledby="userDeleteFormModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header bg-primary">
-                    <h5 class="modal-title fs-5" id="userDeleteFormModalLabel">
-                        <i class="fas fa-user-plus font-weight-bold">&nbsp;</i>
-                        <span>Delete user</span>
-                    </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
 
-                    <div class="modal-body">
-                        <h5>Are you sure you want to delete this user?</h5>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-primary" @click.prevent="deleteUser">Confirm</button>
-                    </div>
-
-            </div>
-        </div>
-    </div>
 </template>

@@ -10,7 +10,7 @@ class UserController extends Controller
 {
     public function index(){
        // dd(UserResource::collection(User::latest()->get()));
-        return UserResource::collection(User::latest()->get())->toJson();
+        return User::latest()->get();
     }
 
     public function store(){

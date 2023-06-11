@@ -47,9 +47,9 @@ class User extends Authenticatable
         'formatted_created_at',
     ];
 
-    public function getFormattedCreatedAttribute(){
+    public function getFormattedCreatedAtAttribute(){
 
-        return $this->created_at->format(config(app.date_format));
+        return $this->created_at->format(config('app.date_format'));
 
     }
 }

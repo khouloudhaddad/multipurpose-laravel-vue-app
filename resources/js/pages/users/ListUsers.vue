@@ -176,7 +176,7 @@
                                 <td>{{ index+1 }}</td>
                                 <td>{{ user.name }}</td>
                                 <td>{{ user.email }}</td>
-                                <td>{{ formatDate(user.created_at) }}</td>
+                                <td>{{ user.created_at }}</td>
                                 <td>-</td>
                                 <td class="text-center">
                                     <a href="#" @click.prevent="editUser(user)">

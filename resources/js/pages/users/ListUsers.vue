@@ -7,7 +7,7 @@
     import * as yup from 'yup';
     import jQuery from 'jquery';
     import { useToastr } from '../../toastr';
-
+    import moment from 'moment';
 
     const toastr = useToastr();
 
@@ -176,7 +176,7 @@
                                 <td>{{ index+1 }}</td>
                                 <td>{{ user.name }}</td>
                                 <td>{{ user.email }}</td>
-                                <td>{{ user.created_at }}</td>
+                                <td>{{ moment(user.created_at).format('YYYY-MM-DD') }}</td>
                                 <td>-</td>
                                 <td class="text-center">
                                     <a href="#" @click.prevent="editUser(user)">

@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\UserRequest;
+use App\Http\Resources\UserResource;
 use App\Models\User;
-use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
     public function index(){
-        return User::latest()->get();
+       // dd(UserResource::collection(User::latest()->get()));
+        return UserResource::collection(User::latest()->get())->toJson();
     }
 
     public function store(){

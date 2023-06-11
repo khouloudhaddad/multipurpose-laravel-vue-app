@@ -42,4 +42,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    protected $appends = [
+        'formatted_created_at',
+    ];
+
+    public function getFormattedCreatedAttribute(){
+
+        return $this->created_at->format(config(app.date_format));
+
+    }
 }
